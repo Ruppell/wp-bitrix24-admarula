@@ -18,9 +18,19 @@ add_action('rest_api_init', function () {
  */
 function bitadma_route_handle( $request ) {
 
-	// perform data sending here:
+	// temp: debugging.
+	$title = 'testing';
+	$data = $request;
+	$log = "\n------------------------\n";
+	$log .= date("Y.m.d G:i:s") . "\n";
+	$log .= (strlen($title) > 0 ? $title : 'DEBUG') . "\n";
+	$log .= print_r($data, 1);
+	$log .= "\n------------------------\n";
 
-    // $response = new WP_REST_Response($posts);
+	file_put_contents( dirname( __FILE__ ) . '/hook.log', $log, FILE_APPEND );
+
+	// perform data sending here:
+	// $response = new WP_REST_Response($posts);
     $response = new WP_REST_Response([]);
     $response->set_status(200);
 
