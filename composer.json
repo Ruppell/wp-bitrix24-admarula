@@ -1,6 +1,6 @@
 {
     "name": "ruppell/wp-bitrix24-admarula",
-    "description": "A WordPress plugin that makes use of Bitrix24 web hooks to pass tracking information to Admarula.",
+    "description": "A WordPress plugin that makes use of Bitrix24 webhooks to pass tracking information to Admarula.",
     "type": "wordpress-plugin",
     "scripts": {
         "test": "./vendor/bin/phpunit"

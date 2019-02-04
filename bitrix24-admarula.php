@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Bitrix24 / Admarula
  * Plugin URI:  https://github.com/Ruppell/wp-bitrix24-admarula
- * Description: A WordPress plugin that makes use of Bitrix24 web hooks to pass tracking information to Admarula.
+ * Description: A WordPress plugin that makes use of Bitrix24 webhooks to pass tracking information to Admarula.
  * Version:     1.0.0
  * Author:      Ruppell
  * Author URI:  http://ruppell.io/
