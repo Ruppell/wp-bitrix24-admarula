@@ -25,3 +25,8 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  * Register plugin options.
  */
 require_once dirname( __FILE__ ) . '/includes/plugin-options.php';
+
+/**
+ * Register WordPress API routes.
+ */
+require_once dirname( __FILE__ ) . '/includes/routes.php';

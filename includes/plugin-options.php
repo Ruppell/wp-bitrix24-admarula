@@ -7,6 +7,17 @@ add_action( 'cmb2_admin_init', 'bitadma_register_plugin_options_metabox' );
  */
 function bitadma_register_plugin_options_metabox() {
 
+	$prefix      = 'bitadma_plugin_';
+
+	// handler display setup.
+	$handler_url = get_rest_url() . 'bitrix24-admarula/v1/handle';
+	$handler_address = __( 'Handler Address', 'bitrix24-admarula' );
+	$handler_after_html = <<<HTML
+		<div style="padding: 10px; margin: 10px 0; background-color: #d4d4d4; text-align: center;">
+			<strong>$handler_address</strong>: $handler_url
+		</div>
+HTML;
+
 	/**
 	 * Registers options page menu item and form.
 	 */
@@ -14,9 +25,9 @@ function bitadma_register_plugin_options_metabox() {
 		'id'           => 'bitadma_plugin_options_page',
 		'title'        => esc_html__( 'Bitrix24 / Admarula', 'bitrix24-admarula' ),
 		'object_types' => array( 'options-page' ),
-		'parent_slug'  => 'options-general.php', // Make options page a submenu item of the themes menu.
-		'option_key'   => 'bitadma_plugin_options', // The option key and admin menu page slug.
-		'icon_url'     => 'dashicons-networking', // Menu icon. Only applicable if 'parent_slug' is left empty.
+		'parent_slug'  => 'options-general.php',
+		'option_key'   => 'bitadma_plugin_options',
+		'icon_url'     => 'dashicons-networking',
 		'message_cb'   => 'bitadma_options_page_message_callback',
 		'capability'   => 'manage_options',
 	) );
@@ -27,12 +38,19 @@ function bitadma_register_plugin_options_metabox() {
 	 * Prefix is not needed.
 	 */
 	$cmb_options->add_field( array(
-		'name'    => esc_html__( 'Site Background Color', 'bitrix24-admarula' ),
-		'desc'    => esc_html__( 'field description (optional)', 'bitrix24-admarula' ),
-		'id'      => 'bg_color',
-		'type'    => 'colorpicker',
-		'default' => '#ffffff',
+		'id'    => $prefix . 'bitrix24_URL_title',
+		'name'  => esc_html__( 'Bitrix24', 'bitrix24-admarula' ),
+		'desc'  => esc_html__( 'Outbound webhook settings.', 'bitrix24-admarula' ),
+		'after' => $handler_after_html,
+		'type'  => 'title',
 	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'bitrix24_authentication_code',
+		'name' => esc_html__( 'Authentication Code', 'bitrix24-admarula' ),
+		'desc' => esc_html__( 'This code will be given to you by Bitrix24 after creating an outbound webhook.', 'bitrix24-admarula' ),
+		'type' => 'text',
+	) );
+
 }
 
 
@@ -59,6 +77,7 @@ function bitadma_register_plugin_options_metabox() {
  * }
  */
 function bitadma_options_page_message_callback( $cmb, $args ) {
+
 	if ( ! empty( $args['should_notify'] ) ) {
 
 		if ( $args['is_updated'] ) {
@@ -69,4 +88,5 @@ function bitadma_options_page_message_callback( $cmb, $args ) {
 
 		add_settings_error( $args['setting'], $args['code'], $args['message'], $args['type'] );
 	}
+
 }
