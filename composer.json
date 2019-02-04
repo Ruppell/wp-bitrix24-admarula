@@ -1,0 +1,19 @@
+{
+    "name": "ruppell/wp-bitrix24-admarula",
+    "description": "A WordPress plugin that makes use of Bitrix24 web hooks to pass tracking information to Admarula.",
+    "type": "wordpress-plugin",
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.6.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vernon Grant",
+            "email": "vernon@ruppell.io"
+        }
+    ],
+    "require": {}
+}
