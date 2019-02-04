@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Bitrix24 Admarula
+ * Plugin Name: Bitrix24 / Admarula
  * Plugin URI:  https://github.com/Ruppell/wp-bitrix24-admarula
  * Description: A WordPress plugin that makes use of Bitrix24 web hooks to pass tracking information to Admarula.
  * Version:     1.0.0
@@ -33,7 +33,10 @@
  * THE SOFTWARE.
  */
 
-$example = __( 'Example', 'bitrix24-admarula' );
+/**
+ * Bootstrap plugin.
+ */
+require_once dirname( __FILE__ ) . '/bootstrap.php';
 
 /**
  * Performs activation actions.
