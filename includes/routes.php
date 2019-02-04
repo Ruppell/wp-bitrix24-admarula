@@ -5,8 +5,8 @@
  */
 add_action('rest_api_init', function () {
 	register_rest_route( 'bitrix24-admarula/v1', 'handle',array(
-		// 'methods'  => 'POST',
-		'methods'  => 'GET',
+		'methods'  => 'POST',
+		// 'methods'  => 'GET',
 		'callback' => 'bitadma_route_handle'
 	));
 });
