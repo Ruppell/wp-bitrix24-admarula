@@ -6,7 +6,6 @@
 add_action('rest_api_init', function () {
 	register_rest_route( 'bitrix24-admarula/v1', 'handle',array(
 		'methods'  => 'POST',
-		// 'methods'  => 'GET',
 		'callback' => 'bitadma_route_handle'
 	));
 });
@@ -18,21 +17,14 @@ add_action('rest_api_init', function () {
  */
 function bitadma_route_handle( $request ) {
 
-	// temp: debugging.
-	$title = 'testing';
-	$data = $request;
-	$log = "\n------------------------\n";
-	$log .= date("Y.m.d G:i:s") . "\n";
-	$log .= (strlen($title) > 0 ? $title : 'DEBUG') . "\n";
-	$log .= print_r($data, 1);
-	$log .= "\n------------------------\n";
+	// log request details.
+	bitadma_log_request( $request, BITADMA_REQUEST_LOG_FILE );
 
-	file_put_contents( dirname( __FILE__ ) . '/hook.log', $log, FILE_APPEND );
-
-	// perform data sending here:
-	// $response = new WP_REST_Response($posts);
     $response = new WP_REST_Response([]);
     $response->set_status(200);
+
+	// log response details.
+	bitadma_log_response( $response, BITADMA_RESPONSE_LOG_FILE );
 
     return $response;
 

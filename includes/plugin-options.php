@@ -7,7 +7,7 @@ add_action( 'cmb2_admin_init', 'bitadma_register_plugin_options_metabox' );
  */
 function bitadma_register_plugin_options_metabox() {
 
-	$prefix      = 'bitadma_plugin_';
+	$prefix = 'bitadma_plugin_';
 
 	// handler display setup.
 	$handler_url = get_rest_url() . 'bitrix24-admarula/v1/handle';
@@ -37,17 +37,68 @@ HTML;
 	 * to be unique within this box.
 	 * Prefix is not needed.
 	 */
+
+	// outbound webhook
 	$cmb_options->add_field( array(
-		'id'    => $prefix . 'bitrix24_URL_title',
-		'name'  => esc_html__( 'Bitrix24', 'bitrix24-admarula' ),
+		'id'    => $prefix . 'bitrix24_outbound_title',
+		'name'  => esc_html__( 'Bitrix24 - Outbound Webhook', 'bitrix24-admarula' ),
 		'desc'  => esc_html__( 'Outbound webhook settings.', 'bitrix24-admarula' ),
 		'after' => $handler_after_html,
 		'type'  => 'title',
 	) );
 	$cmb_options->add_field( array(
-		'id'   => $prefix . 'bitrix24_authentication_code',
+		'id'   => $prefix . 'bitrix24_outbound_authentication_code',
 		'name' => esc_html__( 'Authentication Code', 'bitrix24-admarula' ),
 		'desc' => esc_html__( 'This code will be given to you by Bitrix24 after creating an outbound webhook.', 'bitrix24-admarula' ),
+		'type' => 'text',
+	) );
+
+	// inbound webhook
+	$cmb_options->add_field( array(
+		'id'    => $prefix . 'bitrix24_inbound_title',
+		'name'  => esc_html__( 'Bitrix24 - Inbound Webhook', 'bitrix24-admarula' ),
+		'desc'  => esc_html__( 'Inbound webhook settings. Access permissions to CRM is required.', 'bitrix24-admarula' ),
+		'type'  => 'title',
+	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'bitrix24_inbound_authorization_code',
+		'name' => esc_html__( 'Authorization Code', 'bitrix24-admarula' ),
+		'desc' => esc_html__( 'This code is used to authenticate the webhook in Bitrix24. Save it in a safe place and keep it confidential. This code will be given to you by Bitrix24 after creating an inbound webhook.', 'bitrix24-admarula' ),
+		'type' => 'text',
+	) );
+
+	// admarula settings
+	$cmb_options->add_field( array(
+		'id'    => $prefix . 'admarula_settings_title',
+		'name'  => esc_html__( 'Admarula Settings', 'bitrix24-admarula' ),
+		'desc'  => esc_html__( 'Please provide the needed Admarula details.', 'bitrix24-admarula' ),
+		'type'  => 'title',
+	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'admarula_post_back_url',
+		'name' => esc_html__( 'Post Back URL', 'bitrix24-admarula' ),
+		'desc' => esc_html__( 'The plain post back url, please remove all parameters.', 'bitrix24-admarula' ),
+		'type' => 'text',
+	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'admarula_post_back_url_param_transactionID',
+		'name' => esc_html__( 'TransactionID Parameter Name', 'bitrix24-admarula' ),
+		'desc' => esc_html__( '', 'bitrix24-admarula' ),
+		'default' => 'transactionID',
+		'type' => 'text',
+	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'admarula_post_back_url_param_currency',
+		'name' => esc_html__( 'Currency Parameter Name', 'bitrix24-admarula' ),
+		'desc' => esc_html__( '', 'bitrix24-admarula' ),
+		'default' => 'currency',
+		'type' => 'text',
+	) );
+	$cmb_options->add_field( array(
+		'id'   => $prefix . 'admarula_post_back_url_param_tmpdata',
+		'name' => esc_html__( 'Tmpdata Parameter Name', 'bitrix24-admarula' ),
+		'desc' => esc_html__( '', 'bitrix24-admarula' ),
+		'default' => 'tmpdata',
 		'type' => 'text',
 	) );
 

@@ -22,6 +22,18 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 }
 
 /**
+ * Constants. These values are required for the
+ * plugin to function.
+ */
+define( 'BITADMA_REQUEST_LOG_FILE', dirname( __FILE__ ) . '/logs/requests.log' );
+define( 'BITADMA_RESPONSE_LOG_FILE', dirname( __FILE__ ) . '/logs/responses.log' );
+
+/**
+ * Inlcude required lib files.
+ */
+require_once dirname( __FILE__ ) . '/lib/logging.php';
+
+/**
  * Register plugin options.
  */
 require_once dirname( __FILE__ ) . '/includes/plugin-options.php';
