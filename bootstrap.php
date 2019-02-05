@@ -29,15 +29,22 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 // API
 define( 'BITADMA_API_NAMESPACE', 'bitrix24-admarula/v1' );
 define( 'BITADMA_API_OUTBOUND_ROUTE', 'outbound_handle' );
+define( 'BITADMA_API_BITRIX24_LEAD_SUFFIX', 'crm.lead.get?id=' );
+define( 'BITADMA_API_BITRIX24_DEAL_SUFFIX', 'crm.deal.get?id=' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_ID', 'transactionID' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY', 'currency' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_HASH', 'tmtData' );
 
 // Logging
-define( 'BITADMA_REQUEST_LOG_FILE', dirname( __FILE__ ) . '/logs/requests.log' );
-define( 'BITADMA_RESPONSE_LOG_FILE', dirname( __FILE__ ) . '/logs/responses.log' );
+define( 'BITADMA_INFO_LOG_FILE', dirname( __FILE__ ) . '/logs/info.log' );
+define( 'BITADMA_ERROR_LOG_FILE', dirname( __FILE__ ) . '/logs/error.log' );
+define( 'BITADMA_ADMARULA_LOG_FILE', dirname( __FILE__ ) . '/logs/admarula.log' );
 
 /**
  * Inlcude required lib files.
  */
 require_once dirname( __FILE__ ) . '/lib/logging.php';
+require_once dirname( __FILE__ ) . '/lib/validations.php';
 
 /**
  * Register plugin options.

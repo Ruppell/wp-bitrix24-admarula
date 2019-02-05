@@ -5,27 +5,31 @@
  *
  * @param WP_REST_Request $request
  */
-function bitadma_log_request( $request, $file_path ) {
+function bitadma_log( $data, $file_path ) {
 
-	// TODO: change with proper logic
+	$title = 'testing';
+	$log = "\n------------------------\n";
+	$log .= date("Y.m.d G:i:s") . "\n";
+	$log .= (strlen($title) > 0 ? $title : 'DEBUG') . "\n";
+	$log .= print_r($data, 1);
+	$log .= "\n------------------------\n";
+
+	file_put_contents( $file_path, $log, FILE_APPEND );
+}
+
+/**
+ * Log's successful Admarula notifications.
+ *
+ * @param WP_REST_Request $request
+ */
+function bitadma_log_admarula_success( $response, $item_details, $item_type ) {
+
 	// $title = 'testing';
-	// $data = $request;
 	// $log = "\n------------------------\n";
 	// $log .= date("Y.m.d G:i:s") . "\n";
 	// $log .= (strlen($title) > 0 ? $title : 'DEBUG') . "\n";
 	// $log .= print_r($data, 1);
 	// $log .= "\n------------------------\n";
 
-	file_put_contents( $file_path, 'testing out the logging.', FILE_APPEND );
-}
-
-/**
- * Log's information to the response.log file.
- *
- * @param WP_REST_Response $response
- */
-function bitadma_log_response( $response, $file_path ) {
-
-	file_put_contents( $file_path, 'testing out the logging.', FILE_APPEND );
-
+	file_put_contents( BITADMA_ADMARULA_LOG_FILE, 'success', FILE_APPEND );
 }
