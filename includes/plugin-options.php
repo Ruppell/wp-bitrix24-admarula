@@ -10,7 +10,7 @@ function bitadma_register_plugin_options_metabox() {
 	$prefix = 'bitadma_plugin_';
 
 	// handler display setup.
-	$handler_url = get_rest_url() . 'bitrix24-admarula/v1/handle';
+	$handler_url = get_rest_url() . BITADMA_API_NAMESPACE . '/' . BITADMA_API_OUTBOUND_ROUTE;
 	$handler_address = __( 'Handler Address', 'bitrix24-admarula' );
 	$handler_after_html = <<<HTML
 		<div style="padding: 10px; margin: 10px 0; background-color: #d4d4d4; text-align: center;">

@@ -25,6 +25,12 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  * Constants. These values are required for the
  * plugin to function.
  */
+
+// API
+define( 'BITADMA_API_NAMESPACE', 'bitrix24-admarula/v1' );
+define( 'BITADMA_API_OUTBOUND_ROUTE', 'outbound_handle' );
+
+// Logging
 define( 'BITADMA_REQUEST_LOG_FILE', dirname( __FILE__ ) . '/logs/requests.log' );
 define( 'BITADMA_RESPONSE_LOG_FILE', dirname( __FILE__ ) . '/logs/responses.log' );
 

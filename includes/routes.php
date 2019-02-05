@@ -4,7 +4,7 @@
  * Register the api route that will be used on Bitrix24.
  */
 add_action('rest_api_init', function () {
-	register_rest_route( 'bitrix24-admarula/v1', 'handle',array(
+	register_rest_route( BITADMA_API_NAMESPACE, BITADMA_API_OUTBOUND_ROUTE,array(
 		'methods'  => 'POST',
 		'callback' => 'bitadma_route_handle'
 	));
@@ -13,7 +13,7 @@ add_action('rest_api_init', function () {
 /**
  * Attempts to send the tracking information to Admarula.
  *
- * http://<YOUR_SITE_DOMAIN>/wp-json/bitrix24-admarula/v1/handle
+ * http://<YOUR_SITE_DOMAIN>/wp-json/bitrix24-admarula/v1/outbound_handle
  */
 function bitadma_route_handle( $request ) {
 
