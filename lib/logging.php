@@ -38,16 +38,21 @@ HTML;
  *
  * @param WP_REST_Request $request
  */
-function bitadma_log_admarula_success( $request_params, $item_type, $required_status_id ) {
+function bitadma_log_admarula_success( $request_params, $item_type, $required_status_id, $response ) {
 
-	$item_id       = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID];
-	$item_currency = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY];
-	$item_hash     = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HASH];
-	$item_status   = $required_status_id;
-	$time_stamp    = date("Y.m.d G:i:s");
+	// response details
+	$response_code    = $response['response']['code'];
+	$response_message = $response['response']['message'];
+
+	// item details
+	$item_id          = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID];
+	$item_currency    = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY];
+	$item_hex         = $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX];
+	$item_status      = $required_status_id;
+	$time_stamp       = date("Y.m.d G:i:s");
 
 	$log = <<<HTML
-| TRACKING_ID: $item_id | TYPE: $item_type | STATUS: $item_status  | CURRENCY: $item_currency | TMTDATA_HASH: $item_hash  | TIMESTAMP: $time_stamp | \n
+| ID: $item_id | RESPONSE_CODE: $response_code | RESPONSE_MESSAGE: $response_message  | TYPE: $item_type | STATUS: $item_status  | CURRENCY: $item_currency | TMTDATA_HEX: $item_hex  | TIMESTAMP: $time_stamp | \n
 HTML;
 
 	file_put_contents( BITADMA_ADMARULA_LOG_FILE, $log, FILE_APPEND );

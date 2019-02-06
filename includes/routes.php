@@ -183,9 +183,9 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 		$request_params = array();
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID]       = $results['ID'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
-		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HASH]     = bitadma_get_admarula_tmt_data_hash( $results[$tracking_info_key] );
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]     = bitadma_get_admarula_tmt_data_hex( $results[$tracking_info_key] );
 
-		if ( is_bool( $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HASH] ) ) {
+		if ( is_bool( $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX] ) ) {
 			throw new \Exception('The tmtData tracking information could not be found.');
 		}
 
@@ -200,11 +200,16 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 
 		// incase of error.
 		if ( is_wp_error( $response ) ) {
-			throw new \Exception($response->get_error_message());
+			throw new \Exception( $response->get_error_message() );
+		}
+
+		// make sure the reponse returns with ok status.
+		if ( isset( $response['response']['code'] ) == false || $response['response']['code'] != 200 ) {
+			throw new \Exception( 'Post back url returned with a bad status code of  when 200 was expected' );
 		}
 
 		// on success log results.
-		bitadma_log_admarula_success( $request_params, $item_type, $required_status_id );
+		bitadma_log_admarula_success( $request_params, $item_type, $required_status_id, $response );
 
 	} else {
 

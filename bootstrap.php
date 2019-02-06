@@ -37,7 +37,7 @@ define( 'BITADMA_API_BITRIX24_LEAD_SUFFIX', 'crm.lead.get?id=' );
 define( 'BITADMA_API_BITRIX24_DEAL_SUFFIX', 'crm.deal.get?id=' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_ID', 'transactionID' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY', 'currency' );
-define( 'BITADMA_API_ADMARULA_PARAM_KEY_HASH', 'tmtData' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_HEX', 'tmtData' );
 
 // Logging
 define( 'BITADMA_ERROR_LOG_FILE', dirname( __FILE__ ) . '/logs/error.log' );

@@ -37,7 +37,7 @@ function bitadma_normalize_url( $url_string, $force_trailing_slash = true ) {
  *
  * returns boolean | string Will return false if no match is found.
  */
-function bitadma_get_admarula_tmt_data_hash( $raw_data ) {
+function bitadma_get_admarula_tmt_data_hex( $raw_data ) {
 
 	// pattern
 	$pattern = '(&tmtData=([\S]{0,36}))';
