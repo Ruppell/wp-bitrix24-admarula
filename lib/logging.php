@@ -52,3 +52,29 @@ HTML;
 
 	file_put_contents( BITADMA_ADMARULA_LOG_FILE, $log, FILE_APPEND );
 }
+
+
+/**
+ * This function creates a list of log file information if they exist.
+ */
+function bitadma_get_existing_log_files() {
+
+	$log_files = array();
+
+	if ( file_exists( BITADMA_ADMARULA_LOG_FILE ) ) {
+		array_push( $log_files, array(
+			'title' => BITADMA_ADMARULA_LOG_TITLE,
+			'url'   => BITADMA_ADMARULA_LOG_URL,
+		));
+	}
+
+	if ( file_exists( BITADMA_ERROR_LOG_FILE ) ) {
+		array_push( $log_files, array(
+			'title' => BITADMA_ERROR_LOG_TITLE,
+			'url'   => BITADMA_ERROR_LOG_URL,
+		));
+	}
+
+	return $log_files;
+
+}

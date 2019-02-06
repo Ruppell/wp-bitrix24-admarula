@@ -7,7 +7,9 @@ add_action( 'cmb2_admin_init', 'bitadma_register_plugin_options_metabox' );
  */
 function bitadma_register_plugin_options_metabox() {
 
+	// prefix
 	$prefix = 'bitadma_plugin_';
+
 	// readme info
 	$readme = 'For more detail about these options see the <a href="https://github.com/Ruppell/wp-bitrix24-admarula" target="_blank">readme</a>.';
 
@@ -19,6 +21,20 @@ function bitadma_register_plugin_options_metabox() {
 			<strong>$handler_address</strong>: $handler_url
 		</div>
 HTML;
+
+	// produce a few button links to the log files, if they exist.
+	$log_files = bitadma_get_existing_log_files();
+	$log_files_before_html = '';
+
+	foreach( $log_files as $log_file ) {
+		$title = $log_file['title'];
+		$url = $log_file['url'];
+
+		$log_files_before_html .= <<<HTML
+<a href="$url" target="_black" class="button button-secondary" style="margin-right: 10px;">$title</a>
+HTML;
+
+	}
 
 	/**
 	 * Registers options page menu item and form.
@@ -45,6 +61,7 @@ HTML;
 		'id'    => $prefix . 'bitrix24_outbound_title',
 		'name'  => esc_html__( 'Bitrix24 Settings', 'bitrix24-admarula' ),
 		'desc'  => __( 'Inbound and outbound webhook settings. ' . $readme, 'bitrix24-admarula' ),
+		'before_row' => $log_files_before_html,
 		'after' => $handler_after_html,
 		'type'  => 'title',
 	) );
@@ -63,15 +80,24 @@ HTML;
 	$cmb_options->add_field( array(
 		'id'   => $prefix . 'bitrix24_inbound_tacking_information_key',
 		'name' => esc_html__( 'Tracking Information Key', 'bitrix24-admarula' ),
-		'desc' => __( 'This is the <strong>unique key</strong> that will be used to access the tracking information by using the inbound URL above. ', 'bitrix24-admarula' ),
+		'desc' => __( 'This is the <strong>unique key</strong> that will be used to access the tracking information by using the inbound URL above. Will not work with mutiple field type.', 'bitrix24-admarula' ),
 		'type' => 'text',
 	) );
 
+	// post back testing url.
+	$post_back_test_url = get_rest_url() . BITADMA_API_NAMESPACE . '/' . BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE;
+	$post_back_test_address = __( 'Testing Address', 'bitrix24-admarula' );
+	$post_back_test_after_html = <<<HTML
+		<div style="padding: 10px; margin: 10px 0; background-color: #d4d4d4; text-align: center;">
+			<strong>$post_back_test_address</strong>: $post_back_test_url
+		</div>
+HTML;
 	// admarula settings
 	$cmb_options->add_field( array(
 		'id'    => $prefix . 'admarula_settings_title',
 		'name'  => esc_html__( 'Admarula Settings', 'bitrix24-admarula' ),
 		'desc'  => __( 'Please provide the needed Admarula details. ' . $readme, 'bitrix24-admarula' ),
+		'after' => $post_back_test_after_html,
 		'type'  => 'title',
 	) );
 	$cmb_options->add_field( array(

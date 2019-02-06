@@ -10,7 +10,7 @@ add_action('rest_api_init', function () {
 	));
 
 	// for testing only
-	register_rest_route( BITADMA_API_NAMESPACE, 'post_back_test', array(
+	register_rest_route( BITADMA_API_NAMESPACE, BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE, array(
 		'methods'  => 'POST',
 		'callback' => 'bitadma_route_post_back_test_handle'
 	));
@@ -57,7 +57,7 @@ function bitadma_route_outbound_handle( $request ) {
 					$plugin_options
 				);
 
-				// notify Admarual
+				// notify Admarula
 				bitadma_handle_admarula_notification(
 					$inbound_details['details'],
 					$inbound_details['type'],

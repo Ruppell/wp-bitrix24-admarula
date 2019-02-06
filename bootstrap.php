@@ -26,9 +26,13 @@ if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
  * plugin to function.
  */
 
+// General
+define( 'BITADMA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 // API
 define( 'BITADMA_API_NAMESPACE', 'bitrix24-admarula/v1' );
 define( 'BITADMA_API_OUTBOUND_ROUTE', 'outbound_handle' );
+define( 'BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE', 'post_back_test' );
 define( 'BITADMA_API_BITRIX24_LEAD_SUFFIX', 'crm.lead.get?id=' );
 define( 'BITADMA_API_BITRIX24_DEAL_SUFFIX', 'crm.deal.get?id=' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_ID', 'transactionID' );
@@ -36,9 +40,15 @@ define( 'BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY', 'currency' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_HASH', 'tmtData' );
 
 // Logging
-define( 'BITADMA_INFO_LOG_FILE', dirname( __FILE__ ) . '/logs/info.log' );
 define( 'BITADMA_ERROR_LOG_FILE', dirname( __FILE__ ) . '/logs/error.log' );
+define( 'BITADMA_ERROR_LOG_URL', BITADMA_PLUGIN_URL . 'logs/error.log' );
+define( 'BITADMA_ERROR_LOG_TITLE', 'Errors Log' );
+
 define( 'BITADMA_ADMARULA_LOG_FILE', dirname( __FILE__ ) . '/logs/admarula.log' );
+define( 'BITADMA_ADMARULA_LOG_URL', BITADMA_PLUGIN_URL . 'logs/admarula.log' );
+define( 'BITADMA_ADMARULA_LOG_TITLE', 'Admarula Requests Log' );
+
+define( 'BITADMA_INFO_LOG_FILE', dirname( __FILE__ ) . '/logs/info.log' );
 
 /**
  * Inlcude required lib files.
