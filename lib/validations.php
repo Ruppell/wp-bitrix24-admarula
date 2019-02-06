@@ -114,8 +114,6 @@ function bitadma_is_valid_outbound_bitrix24_request( $request, $authentication_c
  */
 function bitadma_validate_inbound_bitrix24_response( $item_details, $item_type, $plugin_options = array() ) {
 
-	// var_dump( $item_details );
-
 	// get inbound tracking information key
 	$tracking_info_key = bitadma_strip_whitespace( $plugin_options['bitrix24']['inbound_tracking_information_key'] );
 

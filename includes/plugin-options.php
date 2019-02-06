@@ -201,10 +201,17 @@ function bitadma_get_plugin_options() {
  * Checks that all required plugin options are set correctly.
  */
 function bitadma_does_plugin_options_suffice( $plugin_options ) {
+
 	$plugin_options = bitadma_get_plugin_options();
 
-	// validate values and return true or false.
-	// TODO: validate options.
+	foreach ( $plugin_options as $options ) {
+		foreach ( $options as $option ) {
+			if ( empty( $option ) || $option == ' ') {
+				return false;
+			}
+		}
+	}
 
 	return true;
+
 }

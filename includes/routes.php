@@ -183,7 +183,7 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 		$request_params = array();
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID]       = $results['ID'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
-		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]     = bitadma_get_admarula_tmt_data_hex( $results[$tracking_info_key] );
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]      = bitadma_get_admarula_tmt_data_hex( $results[$tracking_info_key] );
 
 		if ( is_bool( $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX] ) ) {
 			throw new \Exception('The tmtData tracking information could not be found.');
