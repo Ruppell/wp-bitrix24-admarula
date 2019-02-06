@@ -159,11 +159,11 @@ function bitadma_get_plugin_options() {
 	$plugin_options = array(
 		'bitrix24' => array(
 			'outbound_authentication_code'     => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_outbound_authentication_code' , '' ),
-			'inbound_url'                      => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_url' , '' ),
 			'inbound_tracking_information_key' => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_tacking_information_key' , '' ),
+			'inbound_url'                      => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_url' , '' ),
 		),
 		'admarula' => array(
-			'post_back_url'       => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
+			'post_back_url' => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
 		)
 	);
 
@@ -178,6 +178,7 @@ function bitadma_does_plugin_options_suffice( $plugin_options ) {
 	$plugin_options = bitadma_get_plugin_options();
 
 	// validate values and return true or false.
+	// TODO: validate options.
 
 	return true;
 }

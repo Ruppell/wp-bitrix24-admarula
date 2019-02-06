@@ -17,7 +17,7 @@ function bitadma_strip_whitespace( $string ) {
 /**
  * Normalizes a url string.
  *
- * TODO: improve
+ * TODO: improve.
  *
  * @return string Normalized url string.
  */
@@ -28,6 +28,36 @@ function bitadma_normalize_url( $url_string, $force_trailing_slash = true ) {
 	}
 
 	return $url_string;
+}
+
+
+/**
+ * This function will attempt to get the Admarula tracking data from
+ * some random raw string data set.
+ *
+ * returns boolean | string Will return false if no match is found.
+ */
+function bitadma_get_admarula_tmt_data_hash( $raw_data ) {
+
+	// pattern
+	$pattern = '(&tmtData=([\S]{0,36}))';
+	$matches = array();
+	$has_match = preg_match( $pattern, $raw_data, $matches );
+
+	// return match or false.
+	if ( $has_match ) {
+		if (isset($matches[1])) {
+
+			return bitadma_strip_whitespace($matches[1]);
+
+		} else {
+			return false;
+		}
+
+	} else {
+		return false;
+	}
+
 }
 
 /**

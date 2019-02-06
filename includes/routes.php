@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Register the api route that will be used on Bitrix24.
  */
@@ -22,7 +21,7 @@ add_action('rest_api_init', function () {
  */
 function bitadma_route_post_back_test_handle( $request ) {
 
-	bitadma_log( $request, BITADMA_INFO_LOG_FILE );
+	bitadma_log_info( $request );
 
 }
 
@@ -34,7 +33,7 @@ function bitadma_route_post_back_test_handle( $request ) {
 function bitadma_route_outbound_handle( $request ) {
 
 	// setup response object
-	$response = new WP_REST_Response("cool");
+	$response = new WP_REST_Response([]);
     $response->set_status( 200 );
 
 	// perform authentication check
@@ -66,7 +65,9 @@ function bitadma_route_outbound_handle( $request ) {
 				);
 
 			} catch( \Exception $e ) {
-				// log to error file.
+				// log exception error messages
+				bitadma_log_error_message( $e->getMessage() );
+
 				$response->set_status( 422 );
 			}
 
@@ -179,20 +180,21 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 		}
 
 		// setup post arguments
-		$body_parameters = array();
-		$body_parameters[BITADMA_API_ADMARULA_PARAM_KEY_ID] = $results['ID'];
-		$body_parameters[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
-		$body_parameters[BITADMA_API_ADMARULA_PARAM_KEY_HASH] = $results[$tracking_info_key];
+		$request_params = array();
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID]       = $results['ID'];
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HASH]     = bitadma_get_admarula_tmt_data_hash( $results[$tracking_info_key] );
 
-		// (&tmtData=([^*]{0,36}))
-		// (&tmtData=([\S]{0,36}))
+		if ( is_bool( $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HASH] ) ) {
+			throw new \Exception('The tmtData tracking information could not be found.');
+		}
 
 		// notify admarula response
 		$response = wp_remote_post(
 			$plugin_options['admarula']['post_back_url'],
 			array(
 				'method' => 'POST',
-				'body'   => $body_parameters,
+				'body'   => $request_params,
 			)
 		);
 
@@ -202,7 +204,7 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 		}
 
 		// on success log results.
-		bitadma_log_admarula_success( $response, $item_details, $item_type );
+		bitadma_log_admarula_success( $request_params, $item_type, $required_status_id );
 
 	} else {
 
