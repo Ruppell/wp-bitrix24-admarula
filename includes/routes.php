@@ -205,7 +205,7 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 
 		// make sure the reponse returns with ok status.
 		if ( isset( $response['response']['code'] ) == false || $response['response']['code'] != 200 ) {
-			throw new \Exception( 'Post back url returned with a bad status code of  when 200 was expected' );
+			throw new \Exception( 'Post back url returned with a bad status code, when 200 was expected' );
 		}
 
 		// on success log results.
