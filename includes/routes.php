@@ -8,8 +8,6 @@ add_action('rest_api_init', function () {
 		'methods'  => 'POST',
 		'callback' => 'bitadma_route_outbound_handle'
 	));
-
-	// for testing only
 	register_rest_route( BITADMA_API_NAMESPACE, BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE, array(
 		'methods'  => 'POST',
 		'callback' => 'bitadma_route_post_back_test_handle'
@@ -21,7 +19,7 @@ add_action('rest_api_init', function () {
  */
 function bitadma_route_post_back_test_handle( $request ) {
 
-	bitadma_log_info( $request );
+	bitadma_log_debug( $request );
 
 }
 
@@ -44,7 +42,7 @@ function bitadma_route_outbound_handle( $request ) {
 
 		$authentication_code = $plugin_options['bitrix24']['outbound_authentication_code'];
 
-		// make sure request is valid.
+		// make sure the outbound request is valid.
 		if ( bitadma_is_valid_outbound_bitrix24_request( $request, $authentication_code ) ) {
 
 			// all good
@@ -52,28 +50,29 @@ function bitadma_route_outbound_handle( $request ) {
 
 				// deal / lead details from bitrix
 				$inbound_details = bitadma_request_item_details_from_bitrix24(
-					$request->get_param('event'),
 					$request->get_param('data')['FIELDS']['ID'],
 					$plugin_options
 				);
 
 				// notify Admarula
 				bitadma_handle_admarula_notification(
-					$inbound_details['details'],
-					$inbound_details['type'],
+					$inbound_details,
 					$plugin_options
 				);
 
 			} catch( \Exception $e ) {
 				// log exception error messages
-				bitadma_log_error_message( $e->getMessage() );
+				bitadma_log_failures_message( $e->getMessage() );
 
 				$response->set_status( 422 );
 			}
 
 		} else {
+
 			// could not be authorized
+			bitadma_log_failures_message( 'Request authorization was denied.' );
 			$response->set_status( 401 );
+
 		}
 
 	}
@@ -85,28 +84,21 @@ function bitadma_route_outbound_handle( $request ) {
 /**
  * This function will get the deal or lead's details by making a
  * request to the Bitrix24 Api, using the inbound details set inside
- * the plugin options. Important that all parameter data is correct.
+ * the plugin options. Important that all the provided parameters are
+ * correct by this point.
  *
  * @throws \Exception
  * @return array The required deal/lead details.
  */
-function bitadma_request_item_details_from_bitrix24( $event_type, $id, $plugin_options ) {
+function bitadma_request_item_details_from_bitrix24( $outbound_item_id, $plugin_options ) {
 
-	$item_type = '';
+	// set inbound api route suffix based on plugin type setting.
 	$request_api_suffix = '';
-
-	// sets the api suffix
-	switch( $event_type ) {
-	case 'ONCRMLEADADD':
-	case 'ONCRMLEADUPDATE':
-	case 'ONCRMLEADDELETE':
-		$item_type = 'LEAD';
+	switch( $plugin_options['trigger']['type'] ) {
+	case 'LEAD':
 		$request_api_suffix = BITADMA_API_BITRIX24_LEAD_SUFFIX;
 		break;
-	case 'ONCRMDEALADD':
-	case 'ONCRMDEALUPDATE':
-	case 'ONCRMDEALDELETE':
-		$item_type = 'DEAL';
+	case 'DEAL':
 		$request_api_suffix = BITADMA_API_BITRIX24_DEAL_SUFFIX;
 		break;
 	default:
@@ -115,7 +107,7 @@ function bitadma_request_item_details_from_bitrix24( $event_type, $id, $plugin_o
 
 	// make request.
 	$normalized_inbound_url = bitadma_normalize_url( $plugin_options['bitrix24']['inbound_url'], true );
-	$response = wp_remote_get( $normalized_inbound_url . $request_api_suffix . $id );
+	$response = wp_remote_get( $normalized_inbound_url . $request_api_suffix . $outbound_item_id );
 
 	// incase of error.
 	if ( is_wp_error( $response ) ) {
@@ -134,11 +126,7 @@ function bitadma_request_item_details_from_bitrix24( $event_type, $id, $plugin_o
 		throw new \Exception( 'Bitrix item details, JSON could not be decoded.' );
 	}
 
-	return array(
-		'details' => $decoded_body,
-		'type'    => $item_type
-	);
-
+	return $decoded_body;
 }
 
 
@@ -150,32 +138,23 @@ function bitadma_request_item_details_from_bitrix24( $event_type, $id, $plugin_o
  * @throws \Exception
  * @return void
  */
-function bitadma_handle_admarula_notification( $item_details, $item_type, $plugin_options ) {
+function bitadma_handle_admarula_notification( $item_details, $plugin_options ) {
 
-	if ( bitadma_validate_inbound_bitrix24_response( $item_details, $item_type, $plugin_options ) ) {
+	if ( bitadma_validate_inbound_bitrix24_response( $item_details, $plugin_options ) ) {
 
 		// get tracking key
 		$tracking_info_key = bitadma_strip_whitespace(
 			$plugin_options['bitrix24']['inbound_tracking_information_key']
 		);
 
-		// set status based on the item type
-		$required_status_id = '';
-		switch ( $item_type ) {
-		case 'LEAD':
-			$required_status_id = 'CONVERTED';
-			break;
-		case 'DEAL':
-			$required_status_id = 'DONE';
-			break;
-		default:
-			throw new \Exception( 'Item type could not be found.!' );
-		}
+		// get type
+		$item_type = $plugin_options['trigger']['type'];
 
+		// get the results only.
 		$results = $item_details['result'];
 
-		// if the status is not correct exit.
-		if ( $results['STATUS_ID'] != $required_status_id ) {
+		// if that status_id is in the plugin options list.
+		if ( bitadma_is_status_id_present( $results['STATUS_ID'], $plugin_options ) == false ) {
 			return;
 		}
 
@@ -209,7 +188,7 @@ function bitadma_handle_admarula_notification( $item_details, $item_type, $plugi
 		}
 
 		// on success log results.
-		bitadma_log_admarula_success( $request_params, $item_type, $required_status_id, $response );
+		bitadma_log_admarula_success( $request_params, $item_type, $results['STATUS_ID'], $response );
 
 	} else {
 

@@ -17,8 +17,6 @@ function bitadma_strip_whitespace( $string ) {
 /**
  * Normalizes a url string.
  *
- * TODO: improve.
- *
  * @return string Normalized url string.
  */
 function bitadma_normalize_url( $url_string, $force_trailing_slash = true ) {
@@ -57,6 +55,25 @@ function bitadma_get_admarula_tmt_data_hex( $raw_data ) {
 	} else {
 		return false;
 	}
+
+}
+
+
+/**
+ * Checks if the provided status ID matches any of the status ID's
+ * defined in the plugin options.
+ */
+function bitadma_is_status_id_present( $status_id, $plugin_options ) {
+
+	$plugin_options_statuses = $plugin_options['trigger']['status_ids'];
+
+	foreach( $plugin_options_statuses as $status ) {
+		if ( $status['status_ID'] == $status_id ) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
@@ -112,7 +129,7 @@ function bitadma_is_valid_outbound_bitrix24_request( $request, $authentication_c
  *
  * @return boolean
  */
-function bitadma_validate_inbound_bitrix24_response( $item_details, $item_type, $plugin_options = array() ) {
+function bitadma_validate_inbound_bitrix24_response( $item_details, $plugin_options ) {
 
 	// get inbound tracking information key
 	$tracking_info_key = bitadma_strip_whitespace( $plugin_options['bitrix24']['inbound_tracking_information_key'] );

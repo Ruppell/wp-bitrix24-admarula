@@ -40,15 +40,15 @@ define( 'BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY', 'currency' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_HEX', 'tmtData' );
 
 // Logging
-define( 'BITADMA_ERROR_LOG_FILE', dirname( __FILE__ ) . '/logs/error.log' );
-define( 'BITADMA_ERROR_LOG_URL', BITADMA_PLUGIN_URL . 'logs/error.log' );
-define( 'BITADMA_ERROR_LOG_TITLE', 'Errors Log' );
+define( 'BITADMA_FAILURES_LOG_FILE', dirname( __FILE__ ) . '/logs/failures.log' );
+define( 'BITADMA_FAILURES_LOG_URL', BITADMA_PLUGIN_URL . 'logs/failures.log' );
+define( 'BITADMA_FAILURES_LOG_TITLE', 'Failures Log' );
 
 define( 'BITADMA_ADMARULA_LOG_FILE', dirname( __FILE__ ) . '/logs/admarula.log' );
 define( 'BITADMA_ADMARULA_LOG_URL', BITADMA_PLUGIN_URL . 'logs/admarula.log' );
 define( 'BITADMA_ADMARULA_LOG_TITLE', 'Admarula Requests Log' );
 
-define( 'BITADMA_INFO_LOG_FILE', dirname( __FILE__ ) . '/logs/info.log' );
+define( 'BITADMA_DEBUG_LOG_FILE', dirname( __FILE__ ) . '/logs/debug.log' );
 
 /**
  * Inlcude required lib files.

@@ -10,9 +10,6 @@ function bitadma_register_plugin_options_metabox() {
 	// prefix
 	$prefix = 'bitadma_plugin_';
 
-	// readme info
-	$readme = 'For more detail about these options see the <a href="https://github.com/Ruppell/wp-bitrix24-admarula" target="_blank">readme</a>.';
-
 	// handler display setup.
 	$handler_url = get_rest_url() . BITADMA_API_NAMESPACE . '/' . BITADMA_API_OUTBOUND_ROUTE;
 	$handler_address = __( 'Outbound Webhook Address', 'bitrix24-admarula' );
@@ -33,7 +30,6 @@ HTML;
 		$log_files_before_html .= <<<HTML
 <a href="$url" target="_black" class="button button-secondary" style="margin-right: 10px;">$title</a>
 HTML;
-
 	}
 
 	/**
@@ -60,8 +56,7 @@ HTML;
 	$cmb_options->add_field( array(
 		'id'    => $prefix . 'bitrix24_outbound_title',
 		'name'  => esc_html__( 'Bitrix24 Settings', 'bitrix24-admarula' ),
-		'desc'  => __( 'Inbound and outbound webhook settings. ' . $readme, 'bitrix24-admarula' ),
-		'before_row' => $log_files_before_html,
+		'before_row' => $log_files_before_html . '<br><p>For more detail about the plugin settings, Please see the <a href="https://github.com/Ruppell/wp-bitrix24-admarula" target="_blank">readme</a>.</p>',
 		'after' => $handler_after_html,
 		'type'  => 'title',
 	) );
@@ -79,8 +74,8 @@ HTML;
 	) );
 	$cmb_options->add_field( array(
 		'id'   => $prefix . 'bitrix24_inbound_tacking_information_key',
-		'name' => esc_html__( 'Tracking Information Key', 'bitrix24-admarula' ),
-		'desc' => __( 'This is the <strong>unique key</strong> that will be used to access the tracking information by using the inbound URL above. Will not work with mutiple field type.', 'bitrix24-admarula' ),
+		'name' => esc_html__( 'Tracking Property Key', 'bitrix24-admarula' ),
+		'desc' => __( 'This is the <strong>json key</strong> that will be used to access the tracking information by using the inbound URL above. Will not work with mutiple field type.', 'bitrix24-admarula' ),
 		'type' => 'text',
 	) );
 
@@ -96,7 +91,6 @@ HTML;
 	$cmb_options->add_field( array(
 		'id'    => $prefix . 'admarula_settings_title',
 		'name'  => esc_html__( 'Admarula Settings', 'bitrix24-admarula' ),
-		'desc'  => __( 'Please provide the needed Admarula details. ' . $readme, 'bitrix24-admarula' ),
 		'after' => $post_back_test_after_html,
 		'type'  => 'title',
 	) );
@@ -105,6 +99,43 @@ HTML;
 		'name' => esc_html__( 'Post Back URL', 'bitrix24-admarula' ),
 		'desc' => __( 'The plain post back url, <strong>remove all parameters from url </strong>.', 'bitrix24-admarula' ),
 		'type' => 'text_url',
+	) );
+
+	// trigger settings
+	$cmb_options->add_field( array(
+		'id'    => $prefix . 'tigger_settings_title',
+		'name'  => esc_html__( 'Trigger Settings', 'bitrix24-admarula' ),
+		'type'  => 'title',
+	) );
+	$cmb_options->add_field( array(
+		'id'               => $prefix . 'trigger_when_type',
+		'name'             => esc_html__( 'Trigger When', 'bitrix24-admarula' ),
+		'desc'             => esc_html__( 'Notify Admarula when the item is of type.', 'bitrix24-admarula' ),
+		'type'             => 'select',
+		'show_option_none' => false,
+		'default'          => 'LEAD',
+		'options'          => array(
+			'LEAD' => __( 'Lead', 'bitrix24-admarula' ),
+			'DEAL' => __( 'Deal', 'bitrix24-admarula' ),
+		),
+	) );
+	$group_field_id = $cmb_options->add_field( array(
+		'id'          => $prefix . 'trigger_when_type_status_is',
+		'type'        => 'group',
+		'description' => esc_html__( 'Admarula will be notified when the Lead / Deal status ID is equal to any of the following.', 'bitrix24-admarula' ),
+		'options'     => array(
+			'group_title'   => esc_html__( 'Status ID {#}', 'bitrix24-admarula' ),
+			'add_button'    => esc_html__( 'Add Another Status ID', 'bitrix24-admarula' ),
+			'remove_button' => esc_html__( 'Remove Entry', 'bitrix24-admarula' ),
+			'sortable'      => false,
+			'closed'     	=> false,
+		),
+	));
+	$cmb_options->add_group_field( $group_field_id, array(
+		'name' => esc_html__( 'Status ID', 'bitrix24-admarula' ),
+		'desc' => esc_html__( 'The json property key "STATUS_ID" value.', 'bitrix24-admarula' ),
+		'id'   => 'status_ID',
+		'type' => 'text',
 	) );
 
 }
@@ -190,7 +221,11 @@ function bitadma_get_plugin_options() {
 		),
 		'admarula' => array(
 			'post_back_url' => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
-		)
+		),
+		'trigger' => array(
+			'type'       => bitadma_get_plugin_option( 'bitadma_plugin_trigger_when_type' , 'LEAD' ),
+			'status_ids' => bitadma_get_plugin_option( 'bitadma_plugin_trigger_when_type_status_is' ),
+		),
 	);
 
 	return $plugin_options;

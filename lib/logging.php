@@ -3,25 +3,25 @@
 /**
  * Logs data to the info file.
  */
-function bitadma_log_info( $data ) {
+function bitadma_log_debug( $data ) {
 
 	$time_stamp = date("Y.m.d G:i:s") . "\n";
 	$raw_data  = print_r( $data, 1 );
 
 	$log = <<<HTML
 ----------------------------------- \n
-$time_stamp | $raw_data
+$time_stamp | \n
+$raw_data
 ----------------------------------- \n
 HTML;
 
-	file_put_contents( BITADMA_INFO_LOG_FILE, $log, FILE_APPEND );
-
+	file_put_contents( BITADMA_DEBUG_LOG_FILE, $log, FILE_APPEND );
 }
 
 /**
- * Logs error messages.
+ * Logs failure messages.
  */
-function bitadma_log_error_message( $message ) {
+function bitadma_log_failures_message( $message ) {
 
 	$time_stamp = date("Y.m.d G:i:s");
 
@@ -29,7 +29,7 @@ function bitadma_log_error_message( $message ) {
 | ERROR_MESSAGE: $message | TIMESTAMP: $time_stamp | \n
 HTML;
 
-	file_put_contents( BITADMA_ERROR_LOG_FILE, $log, FILE_APPEND );
+	file_put_contents( BITADMA_FAILURES_LOG_FILE, $log, FILE_APPEND );
 
 }
 
@@ -56,6 +56,7 @@ function bitadma_log_admarula_success( $request_params, $item_type, $required_st
 HTML;
 
 	file_put_contents( BITADMA_ADMARULA_LOG_FILE, $log, FILE_APPEND );
+
 }
 
 
@@ -73,10 +74,10 @@ function bitadma_get_existing_log_files() {
 		));
 	}
 
-	if ( file_exists( BITADMA_ERROR_LOG_FILE ) ) {
+	if ( file_exists( BITADMA_FAILURES_LOG_FILE ) ) {
 		array_push( $log_files, array(
-			'title' => BITADMA_ERROR_LOG_TITLE,
-			'url'   => BITADMA_ERROR_LOG_URL,
+			'title' => BITADMA_FAILURES_LOG_TITLE,
+			'url'   => BITADMA_FAILURES_LOG_URL,
 		));
 	}
 
