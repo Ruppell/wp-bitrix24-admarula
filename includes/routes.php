@@ -163,10 +163,14 @@ function bitadma_handle_admarula_notification( $item_details, $plugin_options ) 
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID]       = $results['ID'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_TYPE]     = $plugin_options['admarula']['transaction_type'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
-		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]      = bitadma_get_admarula_tmt_data_hex( $results[$tracking_info_key] );
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]      = bitadma_get_admarula_tmt_data_hex(
+			$results[$tracking_info_key],
+			$plugin_options['bitrix24']['inbound_tracking_information_regex']
+		);
 
 		if ( is_bool( $request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX] ) ) {
-			throw new \Exception('The tmtData tracking information could not be found.');
+			return;
+			// throw new \Exception('The tmtData tracking information could not be found.');
 		}
 
 		// build URL

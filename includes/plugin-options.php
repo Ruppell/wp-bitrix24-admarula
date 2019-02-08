@@ -78,6 +78,13 @@ HTML;
 		'desc' => __( 'This is the <strong>json key</strong> that will be used to access the tracking information by using the inbound URL above. Will not work with mutiple field type.', 'bitrix24-admarula' ),
 		'type' => 'text',
 	) );
+	$cmb_options->add_field( array(
+		'id'      => $prefix . 'bitrix24_inbound_tacking_information_regex',
+		'name'    => esc_html__( 'Regular Expression', 'bitrix24-admarula' ),
+		'default' => '(&tmtData=([\S]{0,36}))',
+		'desc'    => __( 'This regular expression is used to extract the tracking code (tmt_data) from the above tracking property key\'s data.', 'bitrix24-admarula' ),
+		'type'    => 'text',
+	) );
 
 	// post back testing url.
 	$post_back_test_url = get_rest_url() . BITADMA_API_NAMESPACE . '/' . BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE;
@@ -228,9 +235,10 @@ function bitadma_get_plugin_options() {
 	// bitadma_plugin_
 	$plugin_options = array(
 		'bitrix24' => array(
-			'outbound_authentication_code'     => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_outbound_authentication_code' , '' ),
-			'inbound_tracking_information_key' => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_tacking_information_key' , '' ),
-			'inbound_url'                      => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_url' , '' ),
+			'outbound_authentication_code'       => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_outbound_authentication_code' , '' ),
+			'inbound_tracking_information_key'   => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_tacking_information_key' , '' ),
+			'inbound_tracking_information_regex' => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_tacking_information_regex' , '' ),
+			'inbound_url'                        => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_url' , '' ),
 		),
 		'admarula' => array(
 			'post_back_url'    => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
