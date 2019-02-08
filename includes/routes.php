@@ -9,7 +9,7 @@ add_action('rest_api_init', function () {
 		'callback' => 'bitadma_route_outbound_handle'
 	));
 	register_rest_route( BITADMA_API_NAMESPACE, BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE, array(
-		'methods'  => 'POST',
+		'methods'  => 'GET',
 		'callback' => 'bitadma_route_post_back_test_handle'
 	));
 });
@@ -161,6 +161,7 @@ function bitadma_handle_admarula_notification( $item_details, $plugin_options ) 
 		// setup post arguments
 		$request_params = array();
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_ID]       = $results['ID'];
+		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_TYPE]     = $plugin_options['admarula']['transaction_type'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY] = $results['CURRENCY_ID'];
 		$request_params[BITADMA_API_ADMARULA_PARAM_KEY_HEX]      = bitadma_get_admarula_tmt_data_hex( $results[$tracking_info_key] );
 
@@ -168,23 +169,21 @@ function bitadma_handle_admarula_notification( $item_details, $plugin_options ) 
 			throw new \Exception('The tmtData tracking information could not be found.');
 		}
 
+		// build URL
+		$admarula_url = $plugin_options['admarula']['post_back_url'];
+		$admarula_url = add_query_arg( $request_params, $admarula_url );
+
 		// notify admarula response
-		$response = wp_remote_post(
-			$plugin_options['admarula']['post_back_url'],
-			array(
-				'method' => 'POST',
-				'body'   => $request_params,
-			)
-		);
+		$response = wp_remote_get( $admarula_url );
 
 		// incase of error.
-		if ( is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) || is_array( $response ) == false ) {
 			throw new \Exception( $response->get_error_message() );
 		}
 
 		// make sure the reponse returns with ok status.
 		if ( isset( $response['response']['code'] ) == false || $response['response']['code'] != 200 ) {
-			throw new \Exception( 'Post back url returned with a bad status code, when 200 was expected' );
+			throw new \Exception( 'Post back url returned with a bad status code of [' . $response['response']['code'] . '], when 200 was expected' );
 		}
 
 		// on success log results.

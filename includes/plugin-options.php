@@ -95,6 +95,19 @@ HTML;
 		'type'  => 'title',
 	) );
 	$cmb_options->add_field( array(
+		'id'               => $prefix . 'admarula_transaction_type',
+		'name'             => esc_html__( 'Transaction Type', 'bitrix24-admarula' ),
+		'desc'             => esc_html__( 'The type of transaction you are tracking.', 'bitrix24-admarula' ),
+		'type'             => 'select',
+		'show_option_none' => false,
+		'default'          => 'sale',
+		'options'          => array(
+			'sale' => __( 'Sale', 'bitrix24-admarula' ),
+			'lead' => __( 'Lead', 'bitrix24-admarula' ),
+			'install' => __( 'Install', 'bitrix24-admarula' ),
+		),
+	) );
+	$cmb_options->add_field( array(
 		'id'   => $prefix . 'admarula_post_back_url',
 		'name' => esc_html__( 'Post Back URL', 'bitrix24-admarula' ),
 		'desc' => __( 'The plain post back url, <strong>remove all parameters from url </strong>.', 'bitrix24-admarula' ),
@@ -220,7 +233,8 @@ function bitadma_get_plugin_options() {
 			'inbound_url'                      => bitadma_get_plugin_option( 'bitadma_plugin_bitrix24_inbound_url' , '' ),
 		),
 		'admarula' => array(
-			'post_back_url' => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
+			'post_back_url'    => bitadma_get_plugin_option( 'bitadma_plugin_admarula_post_back_url' , '' ),
+			'transaction_type' => bitadma_get_plugin_option( 'bitadma_plugin_admarula_transaction_type' , '' ),
 		),
 		'trigger' => array(
 			'type'       => bitadma_get_plugin_option( 'bitadma_plugin_trigger_when_type' , 'LEAD' ),
