@@ -35,10 +35,10 @@ define( 'BITADMA_API_OUTBOUND_ROUTE', 'outbound_handle' );
 define( 'BITADMA_API_ADMARULA_POST_BACK_TEST_ROUTE', 'post_back_test' );
 define( 'BITADMA_API_BITRIX24_LEAD_SUFFIX', 'crm.lead.get?id=' );
 define( 'BITADMA_API_BITRIX24_DEAL_SUFFIX', 'crm.deal.get?id=' );
-define( 'BITADMA_API_ADMARULA_PARAM_KEY_ID', 'id' );
-define( 'BITADMA_API_ADMARULA_PARAM_KEY_TYPE', 'type' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_ID', 'transactionID' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_TYPE', 'conversionType' );
 define( 'BITADMA_API_ADMARULA_PARAM_KEY_CURRENCY', 'currency' );
-define( 'BITADMA_API_ADMARULA_PARAM_KEY_HEX', 'tmt_data' );
+define( 'BITADMA_API_ADMARULA_PARAM_KEY_HEX', 'tmtData' );
 
 // Logging
 define( 'BITADMA_FAILURES_LOG_FILE', dirname( __FILE__ ) . '/logs/failures.log' );
