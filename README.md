@@ -5,6 +5,15 @@ A WordPress plugin that makes use of Bitrix24 webhooks to pass tracking informat
 
 ![Plugin](https://raw.githubusercontent.com/Ruppell/wp-bitrix24-admarula/master/screenshot.png)
 
+## AdMarula Parameters
+
+The following parameters will be sent to AdMarula.
+
+1. **transactionID**
+2. **conversionType**
+3. **currency**
+4. **tmtData**
+
 ## Plugin Settings
 
 The plugin has the following options.
